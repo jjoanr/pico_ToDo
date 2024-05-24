@@ -16,7 +16,9 @@ pico_sdk_init()
 include_directories(include)
 
 add_executable(main
-	src/main.c src/ssd1306.c
+	src/main.c 
+	src/ssd1306.c
+	src/screens.c
 	)
 
 #Pull in pico_stdlib

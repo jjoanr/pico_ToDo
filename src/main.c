@@ -1,41 +1,46 @@
-#include <stdio.h>
+/* src/main.c */
+
 #include <stdint.h>
-#include <string.h>
+#include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
+#include "screens.h"
 
-#include "ssd1306.h"
+// Raspberry Pi Pico GPIO Pins (used for i2c)
+#define PICO_PIN_SDA 2
+#define PICO_PIN_SCL 3
 
+// Function prototypes
 void setup_gpios(void);
 
+//Entry point
 int main() {
     stdio_init_all();
 
-    printf("configuring pins...\n");
+    // initializes gpio pins/i2c
     setup_gpios();
 
-    ssd1306_t disp;
-    disp.external_vcc=false;
-    ssd1306_init(&disp, 128, 64, 0x3C, i2c1);
-    ssd1306_clear(&disp);
-
-    printf("Displaying 'Hello, world!'\n");
-
-    // Display 'Hello, world!'
-    ssd1306_draw_string(&disp, 8, 24, 1, "Hello world!");
-    ssd1306_show(&disp);
+    // init display
+    if(!init_display()) {
+        perror("init_display");
+    }
+    
+    //Display initial screen
+    display_init_screen();
 
     while (true) {
-        // Your main code loop here
     }
 
     return 0;
 }
 
 void setup_gpios(void) {
+    // Initializes i2c
     i2c_init(i2c1, 400000);
-    gpio_set_function(2, GPIO_FUNC_I2C);
-    gpio_set_function(3, GPIO_FUNC_I2C);
-    gpio_pull_up(2);
-    gpio_pull_up(3);
+    // Sets GPIO function as i2c
+    gpio_set_function(PICO_PIN_SDA, GPIO_FUNC_I2C);
+    gpio_set_function(PICO_PIN_SCL, GPIO_FUNC_I2C);
+    // Sets GPIO pins to be pulled up
+    gpio_pull_up(PICO_PIN_SDA);
+    gpio_pull_up(PICO_PIN_SCL);
 }
