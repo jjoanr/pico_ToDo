@@ -14,7 +14,7 @@
 void setup_gpios(void);
 
 //Entry point
-int main() {
+int main(void) {
     stdio_init_all();
 
     // initializes gpio pins/i2c
@@ -24,7 +24,7 @@ int main() {
     if(!init_display()) {
         perror("init_display");
     }
-    
+
     //Display initial screen
     display_init_screen();
 
