@@ -18,7 +18,7 @@ include_directories(include)
 add_executable(main
 	src/main.c 
 	src/ssd1306.c
-	src/screens.c
+	src/tasks.c
 	)
 
 #Pull in pico_stdlib

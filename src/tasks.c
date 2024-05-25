@@ -1,9 +1,6 @@
-/* src/screens.c */
-#include "screens.h"
+/* src/tasks.c */
+#include "tasks.h"
 #include "ssd1306.h"
-
-// List of all screens
-screen *screen_list;
 
 // display settings, defined in ssd1306.h
 ssd1306_t disp;
@@ -15,28 +12,30 @@ bool init_display() {
 	res = ssd1306_init(&disp, 128, 64, 0x3C, i2c1);
 	ssd1306_clear(&disp);
 	return res;
-
-	// Creates init screen
-	
 }
 
 void display_init_screen() {
-    ssd1306_draw_string(&disp, 8, 24, 1, "Hello world!");
+    ssd1306_draw_string(&disp, 38, 16, 1, "ToDo List");
+    ssd1306_draw_wrapped_text(&disp, 10, 30, "Press any button...");
     ssd1306_show(&disp);
 }
 
-void add_screen() {
+void add_task() {
 
 }
 
-void remove_screen() {
+void remove_task() {
 
 }
 
-void next_screen() {
+void next_task() {
 
 }
 
-void prior_screen() {
+void prior_task() {
+
+}
+
+void mark_task_done() {
 
 }

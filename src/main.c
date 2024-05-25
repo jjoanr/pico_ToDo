@@ -4,11 +4,22 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
-#include "screens.h"
+#include "tasks.h"
 
-// Raspberry Pi Pico GPIO Pins (used for i2c)
+// Keeps state of the button pressed
+// 0: No press
+// 1: Next
+// 2: Back
+// 3: Done
+volatile uint32_t buttonPressed = 0;
+
+
+// Raspberry Pi Pico GPIO Pins
 #define PICO_PIN_SDA 2
 #define PICO_PIN_SCL 3
+#define BUTTON_NEXT 18
+#define BUTTON_BACK 19
+#define BUTTON_DONE 20
 
 // Function prototypes
 void setup_gpios(void);
