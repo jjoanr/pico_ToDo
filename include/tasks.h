@@ -24,8 +24,10 @@ struct listOfTasks {
 int init_display();
 int display_init_screen();
 int add_task(task *t);
+int display_initial_task();
 int remove_task();
 int next_task();
+void display_status();
 int prior_task();
 int mark_task_done();
 

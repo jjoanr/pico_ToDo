@@ -9,6 +9,9 @@ ssd1306_t disp;
 // structure that holds the tasks
 struct listOfTasks tasks;
 
+// tracks if the task display has started (not in welcome screen)
+bool startedTaskDisplay = false;
+
 /*
  * Function: init_display
  * ----------------------------
@@ -102,19 +105,37 @@ int remove_task() {
  *   returns: 0 if success, negative otherwise. 
  */
 int next_task() {
-    if(tasks.currentIndex < tasks.currentAmount) {
-	ssd1306_clear(&disp);
-	ssd1306_draw_string(&disp, 46, 16, 1, tasks.taskList[tasks.currentIndex].title);
-	ssd1306_show(&disp);
+    if(!startedTaskDisplay) {
+	startedTaskDisplay = true;
     } else {
-	tasks.currentIndex = 0;
-	ssd1306_clear(&disp);
-	ssd1306_draw_string(&disp, 46, 16, 1, tasks.taskList[tasks.currentIndex].title);
-	ssd1306_show(&disp);
+	tasks.currentIndex++;
     }
-    tasks.currentIndex++;
+    if(tasks.currentIndex >= tasks.currentAmount) {
+	// Start over (circular buffer)
+	tasks.currentIndex = 0;
+    } 
+    ssd1306_clear(&disp);
+    ssd1306_draw_string(&disp, 46, 16, 1, tasks.taskList[tasks.currentIndex].title);
+    display_status();
+    ssd1306_show(&disp);
     return 0;
 }
+
+/*
+ * Function: display_status
+ * ----------------------------
+ *   Displays the task status
+ *
+ *   returns: void 
+ */
+void display_status() {
+    if(tasks.taskList[tasks.currentIndex].isDone) {
+	ssd1306_draw_string(&disp, 50, 48, 1, "DONE!");
+    } else {
+	ssd1306_draw_string(&disp, 50, 48, 1, "To do");
+    }
+}
+
 
 /*
  * Function: prior_task
