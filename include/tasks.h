@@ -5,21 +5,28 @@
 #include <stdbool.h>
 #include <sys/types.h>
 
+#define MAX_LENGTH 15
+#define MAX_TASKS 10
+
 typedef struct task {
 	uint id_task;
-
-	
-
+	char title[MAX_LENGTH];
+	bool isDone;
 } task;
 
+struct listOfTasks {
+	int currentAmount;
+	int currentIndex;
+	task taskList[MAX_TASKS];
+};
 
 // Function prototypes
-bool init_display();
-void display_init_screen();
-void add_task();
-void remove_task();
-void next_task();
-void prior_task();
-void mark_task_done();
+int init_display();
+int display_init_screen();
+int add_task(task *t);
+int remove_task();
+int next_task();
+int prior_task();
+int mark_task_done();
 
 #endif /* _TASKS_H */
