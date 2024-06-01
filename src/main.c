@@ -6,14 +6,6 @@
 #include "hardware/i2c.h"
 #include "tasks.h"
 
-// Keeps state of the button pressed
-// 0: No press
-// 1: Next
-// 2: Back
-// 3: Done
-volatile uint32_t buttonPressed = 0;
-
-
 // Raspberry Pi Pico GPIO Pins
 #define PICO_PIN_SDA 2
 #define PICO_PIN_SCL 3
@@ -23,35 +15,22 @@ volatile uint32_t buttonPressed = 0;
 
 // Function prototypes
 void setup_gpios(void);
+void button_isr(uint gpio, uint32_t events);
 
-//Entry point
+// Entry point
 int main(void) {
     stdio_init_all();
-
-    // initializes gpio pins/i2c
+    // Initializes gpio pins/i2c
     setup_gpios();
-
-    // init display
+    // Init display
     if(!init_display()) {
         perror("init_display");
     }
-
-    //Display initial screen
+    // Display initial screen
     display_init_screen();
-
+    // Infinite loop
     while (true) {
-        // Read the button states
-        bool buttonNext_pressed = !gpio_get(BUTTON_NEXT);  // Active low
-        bool buttonDone_pressed = !gpio_get(BUTTON_DONE);  // Active low
-    
-        if (buttonNext_pressed) {
-            next_task();
-            sleep_ms(200);  // Simple debouncing
-        }
-        if (buttonDone_pressed) {
-            mark_task_done();
-            sleep_ms(200);  // Simple debouncing
-        }
+        // 
     }
 
     return 0;
@@ -66,13 +45,25 @@ void setup_gpios(void) {
     // Sets GPIO pins to be pulled up
     gpio_pull_up(PICO_PIN_SDA);
     gpio_pull_up(PICO_PIN_SCL);
-
+    // GPIO button next config
     gpio_init(BUTTON_NEXT);
     gpio_set_dir(BUTTON_NEXT, GPIO_IN);
     gpio_pull_up(BUTTON_NEXT);
-
+    // GPIO button done config
     gpio_init(BUTTON_DONE);
     gpio_set_dir(BUTTON_DONE, GPIO_IN);
     gpio_pull_up(BUTTON_DONE);
+    // Setup interrupts for buttons
+    gpio_set_irq_enabled_with_callback(BUTTON_NEXT, GPIO_IRQ_EDGE_FALL , true, &button_isr);
+    gpio_set_irq_enabled_with_callback(BUTTON_DONE, GPIO_IRQ_EDGE_FALL , true, &button_isr);
+}
+
+void button_isr(uint gpio, uint32_t events) {
+    if(gpio == BUTTON_NEXT) {
+        next_task();
+    }
+    if(gpio == BUTTON_DONE) {
+        mark_task_done();
+    }
 
 }

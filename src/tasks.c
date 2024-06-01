@@ -3,14 +3,14 @@
 #include "ssd1306.h"
 #include <string.h>
 
-// display settings structure, defined in ssd1306.h
-ssd1306_t disp;
+// Display settings structure, defined in ssd1306.h
+static ssd1306_t disp;
 
-// structure that holds the tasks
-struct listOfTasks tasks;
+// Structure that holds the tasks
+static struct listOfTasks tasks;
 
-// tracks if the task display has started (not in welcome screen)
-bool startedTaskDisplay = false;
+// Tracks if the task display has started (not in welcome screen)
+static bool startedTaskDisplay = false;
 
 /*
  * Function: init_display
@@ -19,36 +19,38 @@ bool startedTaskDisplay = false;
  *
  *   returns: 0 if success, negative otherwise. 
  */
-int init_display() {
-	bool res;
-	
-	// load mock tasks
-	tasks.currentIndex = 0;
-	tasks.currentAmount = 0;
+int init_display(void) {
+    bool res;
 
-	task task1;
-	task1.id_task = 0;
-	strcpy(task1.title, "TASK 1!");
-	task1.isDone = false;
-	add_task(&task1);
+    // Initialize the task list structure
+    tasks.currentIndex = 0;
+    tasks.currentAmount = 0;
 
-	task task2;
-	task2.id_task = 1;
-	strcpy(task2.title, "TASK 2!");
-	task2.isDone = false;
-	add_task(&task2);
-	
-	task task3;
-	task3.id_task = 1;
-	strcpy(task3.title, "TASK 3!");
-	task3.isDone = false;
-	add_task(&task3);
+    // Mock tasks
+    task task1;
+    task1.id_task = 0;
+    strcpy(task1.title, "TASK 1!");
+    task1.isDone = false;
+    add_task(&task1);
 
-	// display init steps
-	disp.external_vcc=false;
-	res = ssd1306_init(&disp, 128, 64, 0x3C, i2c1);
-	ssd1306_clear(&disp);
-	return res;
+    task task2;
+    task2.id_task = 1;
+    strcpy(task2.title, "TASK 2!");
+    task2.isDone = false;
+    add_task(&task2);
+
+    task task3;
+    task3.id_task = 1;
+    strcpy(task3.title, "TASK 3!");
+    task3.isDone = false;
+    add_task(&task3);
+
+    // Initialize display
+    disp.external_vcc=false;
+    res = ssd1306_init(&disp, 128, 64, 0x3C, i2c1);
+    ssd1306_clear(&disp);
+
+    return res ? SUCCESS : ERROR;
 }
 
 /*
@@ -58,11 +60,13 @@ int init_display() {
  *
  *   returns: 0 if success, negative otherwise
  */
-int display_init_screen() {
+int display_init_screen(void) {
     ssd1306_clear(&disp);
     ssd1306_draw_string(&disp, 38, 16, 1, "ToDo List");
     ssd1306_draw_string(&disp, 10, 30, 1, "Press any button...");
     ssd1306_show(&disp);
+
+    return SUCCESS;
 }
 
 
@@ -70,31 +74,31 @@ int display_init_screen() {
  * Function: add_task
  * ----------------------------
  *   Adds a new task to the taskList structure
- *    
+ *
  *   t: task structure
  *
  *   returns: 0 if success, negative otherwise. 
  */
-int add_task(task *t) {
+int add_task(const task *t) {
     if(tasks.currentAmount < MAX_TASKS) {
-	tasks.taskList[tasks.currentAmount] = *t;
-	tasks.currentAmount++;
-	return 0;
+	tasks.taskList[tasks.currentAmount++] = *t;
+	return SUCCESS;
     }
-    return -1;
+    return ERROR;
 }
 
 /*
  * Function: remove_task
  * ----------------------------
  *   Removes an existing task from the taskList structure
- *    
+ *
  *   t_id: task identifier
  *
  *   returns: 0 if success, negative otherwise. 
  */
-int remove_task() {
-    return -1;
+int remove_task(int task_id) {
+    //todo
+    return ERROR;
 }
 
 /*
@@ -104,16 +108,12 @@ int remove_task() {
  *
  *   returns: 0 if success, negative otherwise. 
  */
-int next_task() {
+int next_task(void) {
     if(!startedTaskDisplay) {
 	startedTaskDisplay = true;
     } else {
-	tasks.currentIndex++;
+	tasks.currentIndex = (tasks.currentIndex + 1) % tasks.currentAmount;
     }
-    if(tasks.currentIndex >= tasks.currentAmount) {
-	// Start over (circular buffer)
-	tasks.currentIndex = 0;
-    } 
     ssd1306_clear(&disp);
     ssd1306_draw_string(&disp, 46, 16, 1, tasks.taskList[tasks.currentIndex].title);
     display_status();
@@ -128,7 +128,7 @@ int next_task() {
  *
  *   returns: void 
  */
-void display_status() {
+void display_status(void) {
     if(tasks.taskList[tasks.currentIndex].isDone) {
 	ssd1306_draw_string(&disp, 50, 48, 1, "DONE!");
     } else {
@@ -144,8 +144,9 @@ void display_status() {
  *
  *   returns: 0 if success, negative otherwise. 
  */
-int prior_task() {
-    return -1;
+int prior_task(void) {
+    // todo
+    return ERROR;
 }
 
 /*
@@ -155,7 +156,7 @@ int prior_task() {
  *
  *   returns: 0 if success, negative otherwise. 
  */
-int mark_task_done() {
+int mark_task_done(void) {
     tasks.taskList[tasks.currentIndex].isDone = true;
-    return 0;
+    return SUCCESS;
 }
