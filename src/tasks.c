@@ -12,12 +12,12 @@ static struct listOfTasks tasks;
 // Tracks if the task display has started (not in welcome screen)
 static bool startedTaskDisplay = false;
 
-/*
- * Function: init_display
- * ----------------------------
- *   Initializes display settings.
+/**
+ * @brief Initializes the display settings.
  *
- *   returns: 0 if success, negative otherwise. 
+ * Initializes the display settings.
+ *
+ * @return SUCCESS if success, ERROR otherwise.
  */
 int init_display(void) {
     bool res;
@@ -53,12 +53,10 @@ int init_display(void) {
     return res ? SUCCESS : ERROR;
 }
 
-/*
- * Function: display_init_screen
- * ----------------------------
- *   Displays the program initial/welcome screen
+/**
+ * @brief Displays the program initial/welcome screen.
  *
- *   returns: 0 if success, negative otherwise
+ * @return SUCCESS if success, ERROR otherwise.
  */
 int display_init_screen(void) {
     ssd1306_clear(&disp);
@@ -70,14 +68,11 @@ int display_init_screen(void) {
 }
 
 
-/*
- * Function: add_task
- * ----------------------------
- *   Adds a new task to the taskList structure
+/**
+ * @brief Adds a new task to the task list.
  *
- *   t: task structure
- *
- *   returns: 0 if success, negative otherwise. 
+ * @param t Pointer to the task to be added.
+ * @return SUCCESS if success, ERROR otherwise.
  */
 int add_task(const task *t) {
     if(tasks.currentAmount < MAX_TASKS) {
@@ -87,26 +82,23 @@ int add_task(const task *t) {
     return ERROR;
 }
 
-/*
- * Function: remove_task
- * ----------------------------
- *   Removes an existing task from the taskList structure
+/**
+ * @brief Removes an existing task from the task list.
  *
- *   t_id: task identifier
- *
- *   returns: 0 if success, negative otherwise. 
+ * @param task_id Task identifier to be removed.
+ * @return ERROR (todo)
  */
 int remove_task(int task_id) {
     //todo
     return ERROR;
 }
 
-/*
- * Function: next_task 
- * ----------------------------
- *   Displays the next task available in the screen
+/**
+ * @brief Displays the next task available on the screen.
  *
- *   returns: 0 if success, negative otherwise. 
+ * Cycles through tasks.
+ *
+ * @return SUCCESS if success, ERROR otherwise.
  */
 int next_task(void) {
     if(!startedTaskDisplay) {
@@ -121,12 +113,10 @@ int next_task(void) {
     return 0;
 }
 
-/*
- * Function: display_status
- * ----------------------------
- *   Displays the task status
+/**
+ * @brief Displays the task status.
  *
- *   returns: void 
+ * Shows whether the current task is done or to be done.
  */
 void display_status(void) {
     if(tasks.taskList[tasks.currentIndex].isDone) {
@@ -137,24 +127,20 @@ void display_status(void) {
 }
 
 
-/*
- * Function: prior_task
- * ----------------------------
- *   Displays the previous task
+/**
+ * @brief Displays the previous task.
  *
- *   returns: 0 if success, negative otherwise. 
+ * @return ERROR (todo)
  */
 int prior_task(void) {
     // todo
     return ERROR;
 }
 
-/*
- * Function: mark_task_done
- * ----------------------------
- *   Marks the current task as done
+/**
+ * @brief Marks the current task as done.
  *
- *   returns: 0 if success, negative otherwise. 
+ * @return SUCCESS if success, ERROR otherwise.
  */
 int mark_task_done(void) {
     tasks.taskList[tasks.currentIndex].isDone = true;

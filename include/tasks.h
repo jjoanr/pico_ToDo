@@ -1,4 +1,4 @@
-/* include/screens.h */
+/* include/tasks.h */
 #ifndef TASKS_H
 #define TASKS_H
 
@@ -9,11 +9,11 @@
 #define MAX_TASKS 10
 
 /*
- * @brief Enum for return values
+ * @brief Enum for return values.
  */
 typedef enum {
-    SUCCESS = 0,
-    ERROR = -1,
+	SUCCESS = 0,
+	ERROR = -1,
 } return_code_t;
 
 /*
