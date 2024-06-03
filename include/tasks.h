@@ -41,7 +41,9 @@ int add_task(const task *t);
 int remove_task(int task_id);
 int next_task(void);
 void display_status(void);
+void display_time(uint hour, uint minute);
 int prior_task(void);
 int mark_task_done(void);
+void draw_interface(void);
 
 #endif /* TASKS_H */
