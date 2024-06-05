@@ -59,7 +59,7 @@ int init_display(void) {
  *
  * @return SUCCESS if success, ERROR otherwise.
  */
-int display_init_screen(void) {
+int display_home_screen(void) {
     ssd1306_clear(&disp);
     ssd1306_draw_string(&disp, 38, 16, 1, "ToDo List");
     ssd1306_draw_string(&disp, 10, 30, 1, "Press any button...");

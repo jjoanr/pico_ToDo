@@ -36,7 +36,7 @@ int main(void) {
         perror("init_display");
     }
     // Display initial screen
-    display_init_screen();
+    display_home_screen();
     // Infinite loop
     while (true) {
         // 

@@ -45,7 +45,7 @@ struct listOfTasks {
 
 // Function prototypes
 int init_display(void);
-int display_init_screen(void);
+int display_home_screen(void);
 int add_task(const task *t);
 int remove_task(int task_id);
 int next_task(void);
