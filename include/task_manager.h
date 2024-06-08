@@ -1,12 +1,10 @@
-/* include/tasks.h */
-#ifndef TASKS_H
-#define TASKS_H
+/* include/task_manager.h */
+#ifndef TASK_MANAGER_H
+#define TASK_MANAGER_H
 
 #include <stdbool.h>
 #include <sys/types.h>
 
-#define MAX_LENGTH 42 // CHARS_PER_ROW * 2 rows
-#define MAX_TASKS 10
 /*
  * 5 bit wide characters
  * 1 bit space between characters
@@ -16,19 +14,13 @@
 #define Y_START_ROW_1 24
 #define Y_START_ROW_2 34
 #define TASK_TEXT_MAX_ROWS 2
-
-/*
- * @brief Enum for return values.
- */
-typedef enum {
-	SUCCESS = 0,
-	ERROR = -1,
-} return_code_t;
+#define MAX_LENGTH 42 // CHARS_PER_ROW * 2 rows
+#define MAX_TASKS 10
 
 /*
  * @brief Structure that represents a task.
  */
-typedef struct task {
+typedef struct {
 	uint id_task;			// Task identifier
 	char title[MAX_LENGTH];		// Task text
 	bool isDone;			// Task status
@@ -37,23 +29,17 @@ typedef struct task {
 /*
  * @brief Structure that represents a list of tasks.
  */
-struct listOfTasks {
+typedef struct {
 	int currentAmount;		// Current # of tasks
 	int currentIndex;		// Current task index being displayed
 	task taskList[MAX_TASKS];	// Array of tasks
-};
+} listOfTasks;
 
 // Function prototypes
-int init_display(void);
-int display_home_screen(void);
+void display_task_manager(ssd1306 *disp);
 int add_task(const task *t);
 int remove_task(int task_id);
 int next_task(void);
-void display_status(void);
-void display_time(uint hour, uint minute);
-int prior_task(void);
 int mark_task_done(void);
-void draw_interface(void);
-void draw_cross_task(void);
 
-#endif /* TASKS_H */
+#endif /* TASK_MANAGER_H */

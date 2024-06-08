@@ -1,5 +1,5 @@
-/* src/tasks.c */
-#include "tasks.h"
+/* src/task_manager.c */
+#include "task_manager.h"
 #include "ssd1306.h"
 #include <stdio.h>
 #include <string.h>
