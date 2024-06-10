@@ -2,7 +2,9 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-// Function prototypes
-void display_timer(void);
+#include "ssd1306.h"
 
-#enfid /* TIMER_H */
+// Function prototypes
+void display_timer(ssd1306_t *disp);
+
+#endif /* TIMER_H */

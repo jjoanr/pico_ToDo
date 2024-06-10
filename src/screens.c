@@ -1,60 +1,59 @@
 /* src/screens.c */
 #include "screens.h"
+#include "task_manager.h"
+#include "timer.h"
 
-// Display settings structure, defined in ssd1306.h
-static ssd1306_t disp;
-
-// Current screen to be displayed
-static ScreenState current_screen = SCREEN_HOME;
-
-/**
- * @brief Initializes the display settings.
- *
- * Initializes the display settings: heigth, width, address
- */
-void init_display(void) {
-    disp.external_vcc=false;
-    if(!ssd1306_init(&disp, 128, 64, 0x3C, i2cl)) {
-        perror("init_display");
-    }
-    ssd1306_clear(&disp);
-}
+// Current screen
+extern int current_screen;
 
 /**
  * @brief Displays the home screen.
  */
-void display_home_screen(void) {
-
+void display_home_screen(ssd1306_t *disp) {
+    ssd1306_clear(disp);
+    ssd1306_draw_string(disp, 34, 6, 1, "Home Screen");
+    ssd1306_draw_string(disp, 20, 24, 1, "1. Task Manager");
+    ssd1306_draw_string(disp, 20, 40, 1, "2. Study Timer");
+    ssd1306_show(disp);
+    current_screen = 0;
 }
 
 /**
  * @brief Displays the task manager screen.
  */
-void display_task_manager_screen(void) {
-
+void display_task_manager_screen(ssd1306_t *disp) {
+    ssd1306_clear(disp);
+    display_task_manager(disp);
+    current_screen = 1;
 }
 
 /**
  * @brief Displays the timer screen.
  */
-void display_timer_screen(void) {
-
+void display_timer_screen(ssd1306_t *disp) {
+    ssd1306_clear(disp);
+    // display_timer(disp);
+    current_screen = 2;
 }
 
 /**
- * @brief Initializes the display settings.
- *
- * Initializes the display settings: heigth, width, address
+ * @brief Handles screen switch
  */
-void handle_button_next(void) {
-
-}
-
-/**
- * @brief Initializes the display settings.
- *
- * Initializes the display settings: heigth, width, address
- */
-void handle_button_done(void) {
-
+void switch_screen(int screen_id, ssd1306_t *disp) {
+    switch(screen_id) {
+        case 0:
+            ssd1306_clear(disp);
+            display_home_screen(disp);
+            break;
+        case 1:
+            ssd1306_clear(disp);
+            display_task_manager_screen(disp);
+            break;
+        case 2:
+            ssd1306_clear(disp);
+            display_timer_screen(disp);
+            break;
+        default:
+            break;
+    }
 }

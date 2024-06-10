@@ -2,10 +2,10 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <cstdint>
+#include <stdint.h>
 
 // Function prototypes
 void setup_gpios(void);
-void button_isr(uint32_t gpio, uint32_t events);
+void button_isr(unsigned int gpio, uint32_t events);
 
 #endif /* INPUT_H */

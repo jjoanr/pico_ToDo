@@ -1,8 +1,10 @@
 /* src/input.c */
-#include "input.c"
-#include <cstdint>
+#include "input.h"
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
+#include "task_manager.h"
+#include "ssd1306.h"
+#include "screens.h"
 
 // Define debounce time (in miliseconds)
 #define DEBOUNCE_TIME_MS 50
@@ -14,8 +16,17 @@
 #define BUTTON_BACK 19
 #define BUTTON_DONE 15
 
+// Current screen
+extern int current_screen;
+// Display structure
+extern ssd1306_t disp;
+// Timer structure for debouncing
 static repeating_timer_t debounce_timer;
-static uint32_t debounce_gpio;
+// Stores gpio that caused interrupt
+static uint debounce_gpio;
+
+// Function prototypes - static functions
+static bool debounce_timer_callback(repeating_timer_t *rt);
 
 void setup_gpios(void) {
     // Initializes i2c
@@ -39,20 +50,41 @@ void setup_gpios(void) {
     gpio_set_irq_enabled_with_callback(BUTTON_DONE, GPIO_IRQ_EDGE_FALL , true, &button_isr);
 }
 
-void button_isr(uint32_t gpio, uint32_t events) {
+void button_isr(unsigned int gpio, uint32_t events) {
     // Store the gpio that caused the interrupt
     debounce_gpio = gpio;
     // Debouncing
     add_repeating_timer_ms(-DEBOUNCE_TIME_MS, debounce_timer_callback, NULL, &debounce_timer);
 }
 
-bool debounce_timer_callback(repeating_timer_t *rt) {
+static bool debounce_timer_callback(repeating_timer_t *rt) {
     // Check if the button is still pressed
     if (gpio_get(debounce_gpio) == 0) {
-        if (debounce_gpio == BUTTON_NEXT) {
-            next_task();
-        } else if (debounce_gpio == BUTTON_DONE) {
-            mark_task_done();
+        // Check current screen
+        switch(current_screen) {
+            case 0:
+                if (debounce_gpio == BUTTON_NEXT) {
+                    display_task_manager_screen(&disp);
+                } else if (debounce_gpio == BUTTON_DONE) {
+                    display_timer_screen(&disp);
+                }
+                break;
+            case 1:
+                if (debounce_gpio == BUTTON_NEXT) {
+                    next_task(&disp);
+                } else if (debounce_gpio == BUTTON_DONE) {
+                    mark_task_done(&disp);
+                }
+                break;
+            case 2:
+                if (debounce_gpio == BUTTON_NEXT) {
+                    // next_task(&disp);
+                } else if (debounce_gpio == BUTTON_DONE) {
+                    // mark_task_done(&disp);
+                }
+                break;
+            default:
+                break;
         }
     }
     // Remove the timer after running

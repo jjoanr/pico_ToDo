@@ -2,6 +2,7 @@
 #ifndef TASK_MANAGER_H
 #define TASK_MANAGER_H
 
+#include "ssd1306.h"
 #include <stdbool.h>
 #include <sys/types.h>
 
@@ -16,6 +17,9 @@
 #define TASK_TEXT_MAX_ROWS 2
 #define MAX_LENGTH 42 // CHARS_PER_ROW * 2 rows
 #define MAX_TASKS 10
+
+#define SUCCESS 0
+#define ERROR  -1
 
 /*
  * @brief Structure that represents a task.
@@ -36,10 +40,9 @@ typedef struct {
 } listOfTasks;
 
 // Function prototypes
-void display_task_manager(ssd1306 *disp);
+void display_task_manager(ssd1306_t *disp);
 int add_task(const task *t);
-int remove_task(int task_id);
-int next_task(void);
-int mark_task_done(void);
+void next_task(ssd1306_t *disp);
+void mark_task_done(ssd1306_t *disp);
 
 #endif /* TASK_MANAGER_H */
