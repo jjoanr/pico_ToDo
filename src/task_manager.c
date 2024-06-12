@@ -12,6 +12,7 @@ static void display_status(ssd1306_t *disp);
 static void draw_interface(ssd1306_t *disp);
 static void draw_cross_task(ssd1306_t *disp);
 static void display_time(uint hour, uint minute, ssd1306_t *disp);
+static void display_status(ssd1306_t *disp); 
 
 /**
  * @brief Initializes the task manager
@@ -100,7 +101,7 @@ void next_task(ssd1306_t *disp) {
  *
  * Shows whether the current task is done or to be done.
  */
-void display_status(ssd1306_t *disp) {
+static void display_status(ssd1306_t *disp) {
     // Clear status area only:
     //   Starting x,y point: (0,51)
     //   Width: All screen
@@ -128,7 +129,7 @@ void display_status(ssd1306_t *disp) {
  *
  * Displays the current time hour:minute at the top of the screen
  */
-void display_time(uint hour, uint minute, ssd1306_t *disp) {
+static void display_time(uint hour, uint minute, ssd1306_t *disp) {
     // Clear time area only:
     //   Starting x,y point: (0,0)
     //   Width: All screen
@@ -140,7 +141,6 @@ void display_time(uint hour, uint minute, ssd1306_t *disp) {
     ssd1306_draw_string(disp, 50, 6, 1, str);
     ssd1306_show(disp);
 }
-
 
 /**
  * @brief Displays the previous task.
@@ -178,7 +178,7 @@ void mark_task_done(ssd1306_t *disp) {
  * --------------------------
  *
  */
-void draw_interface(ssd1306_t *disp) {
+static void draw_interface(ssd1306_t *disp) {
     // draw time-task separator -> line in Y=18
     ssd1306_draw_line(disp, 0, 18, 127, 18);
     // draw task-status separator -> line in y=48
@@ -189,19 +189,8 @@ void draw_interface(ssd1306_t *disp) {
 /**
  * @brief Draws horizontal lines to mark task as done.
  */
-void draw_cross_task(ssd1306_t *disp) {
-    /*
-    // Calculate the coordinates to draw the cross lines over the task text
-    int yPosition1 = Y_START_ROW_1 + 1;  // Adjust based on font height and positioning
-    int yPosition2 = Y_START_ROW_2 + 1; // Adjust based on font height and positioning
-    // Row 1 cross lines
-    ssd1306_draw_line(disp, 0, yPosition1, 127, yPosition1);
-    ssd1306_draw_line(disp, 0, yPosition1 + 4, 127, yPosition1 + 4);
-    // Row 2 cross lines
-    ssd1306_draw_line(disp, 0, yPosition2, 127, yPosition2);
-    ssd1306_draw_line(disp, 0, yPosition2 + 4, 127, yPosition2 + 4);
-    */
-// Draw first diagonal line
+static void draw_cross_task(ssd1306_t *disp) {
+    // Draw first diagonal line
     ssd1306_draw_line(disp, 0, 19, 127, 48);
     // Draw second diagonal line
     ssd1306_draw_line(disp, 0, 48, 127, 19);

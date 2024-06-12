@@ -5,8 +5,7 @@
 
 // Function prototypes
 void display_home_screen(ssd1306_t *disp);
-void display_task_manager_screen(ssd1306_t *disp);
-void display_timer_screen(ssd1306_t *disp);
-void switch_screen(int screen_id, ssd1306_t *disp);
+void home_screen_toggle_selector(ssd1306_t *disp);
+void display_selected_screen(ssd1306_t *disp);
 
 #endif /* SCREENS_H */

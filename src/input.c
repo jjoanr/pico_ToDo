@@ -64,9 +64,9 @@ static bool debounce_timer_callback(repeating_timer_t *rt) {
         switch(current_screen) {
             case 0:
                 if (debounce_gpio == BUTTON_NEXT) {
-                    display_task_manager_screen(&disp);
+                    home_screen_toggle_selector(&disp);
                 } else if (debounce_gpio == BUTTON_DONE) {
-                    display_timer_screen(&disp);
+                    display_selected_screen(&disp);
                 }
                 break;
             case 1:
