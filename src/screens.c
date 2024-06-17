@@ -2,6 +2,7 @@
 #include "screens.h"
 #include "task_manager.h"
 #include "timer.h"
+#include "pico/stdlib.h"
 
 // Current screen
 extern int current_screen;
@@ -21,11 +22,11 @@ static void display_timer_screen(ssd1306_t *disp);
  */
 void display_home_screen(ssd1306_t *disp) {
     ssd1306_clear(disp);
-    ssd1306_draw_string(disp, 34, 6, 1, "Home Screen");
-    ssd1306_draw_string(disp, 40, 24, 1, "Task Manager");
-    ssd1306_draw_string(disp, 40, 40, 1, "Study Timer");
+    ssd1306_draw_string(disp, 32, 6, 1, "Home Screen");
+    ssd1306_draw_string(disp, 34, 24, 1, "Task Manager");
+    ssd1306_draw_string(disp, 34, 40, 1, "Study Timer");
     // Draw option selector for first option
-    ssd1306_draw_string(disp, 20, 24, 1, ">>");
+    ssd1306_draw_string(disp, 14, 24, 1, ">>");
     ssd1306_show(disp);
     
     current_screen = 0;
@@ -38,13 +39,13 @@ void home_screen_toggle_selector(ssd1306_t *disp) {
     // 2 options for now (thats why %2)
     option_selected = (option_selected + 1) % 2;
     // Clears the selected option character
-    ssd1306_clear_square(disp, 20, 24, 18, 24);
+    ssd1306_clear_square(disp, 14, 24, 18, 24);
     switch(option_selected) {
         case 0:
-            ssd1306_draw_string(disp, 20, 24, 1, ">>");
+            ssd1306_draw_string(disp, 14, 24, 1, ">>");
             break;
         case 1:
-            ssd1306_draw_string(disp, 20, 40, 1, ">>");
+            ssd1306_draw_string(disp, 14, 40, 1, ">>");
             break;
         default:
             break;

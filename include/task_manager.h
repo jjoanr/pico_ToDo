@@ -37,6 +37,7 @@ typedef struct {
 	int currentAmount;		// Current # of tasks
 	int currentIndex;		// Current task index being displayed
 	task taskList[MAX_TASKS];	// Array of tasks
+	int tasksCompleted;
 } listOfTasks;
 
 // Function prototypes

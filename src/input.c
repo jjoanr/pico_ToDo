@@ -7,7 +7,7 @@
 #include "screens.h"
 
 // Define debounce time (in miliseconds)
-#define DEBOUNCE_TIME_MS 50
+#define DEBOUNCE_TIME_MS 100
 
 // Raspberry Pi Pico GPIO Pins
 #define PICO_PIN_SDA 2

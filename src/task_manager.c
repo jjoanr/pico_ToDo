@@ -3,6 +3,7 @@
 #include "ssd1306.h"
 #include <stdio.h>
 #include <string.h>
+#include "screens.h"
 
 // Structure that holds the tasks
 static listOfTasks tasks;
@@ -23,6 +24,7 @@ void display_task_manager(ssd1306_t *disp) {
     // Initialize the task list structure
     tasks.currentIndex = -1;
     tasks.currentAmount = 0;
+    tasks.tasksCompleted = 0;
 
     // Mock tasks
     task task1 = {0, "Task 1", false};
@@ -158,9 +160,16 @@ int prior_task(void) {
  * @return SUCCESS if success, ERROR otherwise.
  */
 void mark_task_done(ssd1306_t *disp) {
-    // Toggles between done and to do
-    // tasks.taskList[tasks.currentIndex].isDone = tasks.taskList[tasks.currentIndex].isDone ? false : true;
-    tasks.taskList[tasks.currentIndex].isDone = true;
+    bool taskStatus = tasks.taskList[tasks.currentIndex].isDone;
+    // Checks task status
+    if(!taskStatus) {
+	tasks.taskList[tasks.currentIndex].isDone = true;
+	tasks.tasksCompleted++;
+    } else {
+	tasks.taskList[tasks.currentIndex].isDone = false;
+	tasks.tasksCompleted--;
+    }
+
     display_status(disp);
 }
 
